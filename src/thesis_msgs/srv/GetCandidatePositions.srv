@@ -1,0 +1,8 @@
+# Request: package dimensions (to filter candidates that don't fit)
+float32 length
+float32 width
+float32 height
+---
+# Response: candidate positions (sorted by tie-breaking order: X, Z, Y)
+geometry_msgs/Point[] candidates
+

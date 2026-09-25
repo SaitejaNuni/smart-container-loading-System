@@ -1,0 +1,5 @@
+# Request: nothing (empty)
+---
+# Response: the next generated package
+bool has_next
+thesis_msgs/PackageInfo package

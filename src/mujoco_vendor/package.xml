@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>mujoco_vendor</name>
+  <version>0.1.1</version>
+  <description>Vendor package for MuJoCo simulator of version 3.12.0</description>
+  <maintainer email="sai.kishor@pal-robotics.com">Sai Kishor Kothakota</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <author email="sergi.acosta@pal-robotics.com">Sergi de las Muelas Acosta</author>
+  <author email="sai.kishor@pal-robotics.com">Sai Kishor Kothakota</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_vendor_package</buildtool_depend>
+  <buildtool_depend>git</buildtool_depend>
+  <buildtool_depend>patchelf</buildtool_depend>
+
+  <build_depend>pkg-config</build_depend>
+  <build_depend>libglfw3-dev</build_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

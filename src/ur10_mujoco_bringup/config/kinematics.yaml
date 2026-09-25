@@ -1,0 +1,25 @@
+ur_manipulator:
+  kinematics_solver: pick_ik/PickIkPlugin
+
+  # 10 restarts, each with 1 second. Worst-case total = 10 s.
+  # The restarts are what avoid the wrong-branch problem: each attempt
+  # starts from a different random guess, so at least one is likely to
+  # land in the basin that contains the correct solution.
+  kinematics_solver_timeout: 3.0
+  kinematics_solver_attempts: 5
+
+  mode: local
+  stop_optimization_on_valid_solution: false
+
+  position_threshold: 0.005
+  orientation_threshold: 0.05
+  cost_threshold: 0.01
+
+  position_scale: 1.0
+  rotation_scale: 0.5
+
+  # Prefer solutions near the seed. This is the second lever — it makes
+  # the correct branch cheaper even before the restarts finish.
+  minimal_displacement_weight: 1.0
+
+  gd_step_size: 0.0001

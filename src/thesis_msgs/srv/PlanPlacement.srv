@@ -1,0 +1,9 @@
+# Request: a package to plan placement for
+thesis_msgs/PackageInfo package
+
+---
+
+# Response: the placement decision
+bool success                          # false if no valid placement found
+thesis_msgs/PlacementTarget target    # the placement (only meaningful if success=true)
+string reason                         # human-readable explanation if success=false

@@ -1,0 +1,51 @@
+## Colcon
+**/build
+**/install
+**/log
+
+## Python
+**/__pycache__
+**/*.py[oc]
+**/*.py[cod]
+**/build
+**/dist
+**/wheels
+**/*.egg-info
+
+## Cache
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+
+## Reports
+**/.coverage
+**/coverage.xml
+**/junit.xml
+**/report
+**/reports
+
+## Dev Container
+.devcontainer
+
+## Environment
+**/.env
+**/.env.*
+
+## Docker
+Dockerfile*
+.dockerignore
+.docker/*
+!.docker/*.bash
+
+## Git
+.git
+.gitignore
+.gitmodules
+
+## GitHub
+.github
+
+## Pre-commit
+.git_hooks/*
+!.git_hooks/*.bash
+.pre-commit-config.yaml

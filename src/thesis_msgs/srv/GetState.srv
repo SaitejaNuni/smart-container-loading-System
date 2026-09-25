@@ -1,0 +1,5 @@
+# Request: nothing — just asking for current state
+---
+# Response: list of placed boxes
+thesis_msgs/PackageInfo[] packages
+geometry_msgs/Pose[] poses

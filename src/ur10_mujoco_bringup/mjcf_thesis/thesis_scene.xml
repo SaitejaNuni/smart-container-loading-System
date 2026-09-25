@@ -1,0 +1,359 @@
+<mujoco model="pick_place_scene_pool">
+  <statistic center="0.7 0 0.5" extent="1.5"/>
+  <include file="ur10e_notorque.xml"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.2 0.2 0.2" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="120" elevation="-20"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+    <material name="container_wall" rgba="0.8 0.6 0.4 0.35"/>
+    <material name="container_floor" rgba="0.7 0.5 0.3 1"/>
+    <material name="robot_pillar" rgba="0.3 0.3 0.3 1"/>
+    <material name="pickup_station" rgba="0.5 0.5 0.5 1"/>
+    <material name="package_material" rgba="0.9 0.4 0.1 1"/>
+  </asset>
+
+  <worldbody>
+    <light pos="2 2 4" dir="-1 -1 -1" directional="true" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3"/>
+    <light pos="-2 -2 4" dir="1 1 -1" directional="true" diffuse="0.4 0.4 0.4"/>
+
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane" pos="0 0 -0.01"/>
+
+    <!-- Container geometry -->
+    <geom name="container_back" type="box" pos="0 0 0.9" size="0.005 0.9 0.9" material="container_wall" contype="1" conaffinity="1"/>
+    <geom name="container_left" type="box" pos="0.5 -0.9 0.9" size="0.5 0.005 0.9" material="container_wall" contype="1" conaffinity="1"/>
+    <geom name="container_right" type="box" pos="0.5 0.9 0.9" size="0.5 0.005 0.9" material="container_wall" contype="1" conaffinity="1"/>
+    <geom name="container_top" type="box" pos="0.5 0 1.8" size="0.5 0.9 0.005" material="container_wall" contype="1" conaffinity="1"/>
+    <geom name="container_floor" type="box" pos="0.5 0 0" size="0.5 0.9 0.005" material="container_floor" contype="1" conaffinity="1"/>
+
+    <!-- Robot pillar -->
+    <geom name="robot_pillar" type="cylinder" pos="0.9 0 0.225" size="0.1 0.225" material="robot_pillar" contype="1" conaffinity="1"/>
+
+    <!-- Pickup station -->
+    <geom name="pickup_station" type="box" pos="1.4 0 0.375" size="0.15 0.15 0.375" material="pickup_station" contype="1" conaffinity="1"/>
+
+    <!-- Pool of 50 hidden packages -->
+    <body name="package_00" pos="-10.0 -100.0 5.0">
+      <freejoint name="package_00_joint"/>
+      <inertial pos="0 0 0" mass="7.125" diaginertia="0.053023 0.055351 0.063732"/>
+      <geom name="package_00_geom" type="box" size="0.1179 0.1137 0.0969" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_01" pos="-9.5 -100.0 5.0">
+      <freejoint name="package_01_joint"/>
+      <inertial pos="0 0 0" mass="7.968" diaginertia="0.050821 0.057567 0.074640"/>
+      <geom name="package_01_geom" type="box" size="0.1238 0.1131 0.0797" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_02" pos="-9.0 -100.0 5.0">
+      <freejoint name="package_02_joint"/>
+      <inertial pos="0 0 0" mass="9.304" diaginertia="0.047689 0.050047 0.056631"/>
+      <geom name="package_02_geom" type="box" size="0.0975 0.0935 0.0814" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_03" pos="-8.5 -100.0 5.0">
+      <freejoint name="package_03_joint"/>
+      <inertial pos="0 0 0" mass="2.659" diaginertia="0.018552 0.020322 0.022137"/>
+      <geom name="package_03_geom" type="box" size="0.1161 0.1072 0.0972" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_04" pos="-8.0 -100.0 5.0">
+      <freejoint name="package_04_joint"/>
+      <inertial pos="0 0 0" mass="6.501" diaginertia="0.036117 0.042599 0.052219"/>
+      <geom name="package_04_geom" type="box" size="0.1164 0.1027 0.0782" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_05" pos="-7.5 -100.0 5.0">
+      <freejoint name="package_05_joint"/>
+      <inertial pos="0 0 0" mass="8.985" diaginertia="0.063927 0.071455 0.083882"/>
+      <geom name="package_05_geom" type="box" size="0.1235 0.1129 0.0927" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_06" pos="-7.0 -100.0 5.0">
+      <freejoint name="package_06_joint"/>
+      <inertial pos="0 0 0" mass="0.916" diaginertia="0.005145 0.006156 0.006916"/>
+      <geom name="package_06_geom" type="box" size="0.1139 0.0983 0.0847" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_07" pos="-6.5 -100.0 5.0">
+      <freejoint name="package_07_joint"/>
+      <inertial pos="0 0 0" mass="9.691" diaginertia="0.060590 0.062797 0.079184"/>
+      <geom name="package_07_geom" type="box" size="0.1122 0.1092 0.0827" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_08" pos="-6.0 -100.0 5.0">
+      <freejoint name="package_08_joint"/>
+      <inertial pos="0 0 0" mass="2.300" diaginertia="0.013095 0.013824 0.014141"/>
+      <geom name="package_08_geom" type="box" size="0.0985 0.0935 0.0913" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_09" pos="-5.5 -100.0 5.0">
+      <freejoint name="package_09_joint"/>
+      <inertial pos="0 0 0" mass="6.863" diaginertia="0.032251 0.037519 0.039381"/>
+      <geom name="package_09_geom" type="box" size="0.0988 0.0863 0.0815" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_10" pos="-5.0 -100.0 5.0">
+      <freejoint name="package_10_joint"/>
+      <inertial pos="0 0 0" mass="3.467" diaginertia="0.024832 0.026567 0.029712"/>
+      <geom name="package_10_geom" type="box" size="0.1166 0.1100 0.0969" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_11" pos="-4.5 -100.0 5.0">
+      <freejoint name="package_11_joint"/>
+      <inertial pos="0 0 0" mass="3.239" diaginertia="0.023955 0.024299 0.029021"/>
+      <geom name="package_11_geom" type="box" size="0.1166 0.1152 0.0944" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_12" pos="-4.0 -100.0 5.0">
+      <freejoint name="package_12_joint"/>
+      <inertial pos="0 0 0" mass="0.570" diaginertia="0.002650 0.003539 0.003635"/>
+      <geom name="package_12_geom" type="box" size="0.1091 0.0850 0.0820" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_13" pos="-3.5 -100.0 5.0">
+      <freejoint name="package_13_joint"/>
+      <inertial pos="0 0 0" mass="7.917" diaginertia="0.063001 0.065424 0.066586"/>
+      <geom name="package_13_geom" type="box" size="0.1143 0.1103 0.1082" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_14" pos="-3.0 -100.0 5.0">
+      <freejoint name="package_14_joint"/>
+      <inertial pos="0 0 0" mass="1.588" diaginertia="0.008637 0.009222 0.010742"/>
+      <geom name="package_14_geom" type="box" size="0.1034 0.0979 0.0820" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_15" pos="-2.5 -100.0 5.0">
+      <freejoint name="package_15_joint"/>
+      <inertial pos="0 0 0" mass="7.767" diaginertia="0.052757 0.055584 0.058044"/>
+      <geom name="package_15_geom" type="box" size="0.1084 0.1033 0.0986" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_16" pos="-2.0 -100.0 5.0">
+      <freejoint name="package_16_joint"/>
+      <inertial pos="0 0 0" mass="3.388" diaginertia="0.023875 0.024769 0.024834"/>
+      <geom name="package_16_geom" type="box" size="0.1067 0.1030 0.1027" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_17" pos="-1.5 -100.0 5.0">
+      <freejoint name="package_17_joint"/>
+      <inertial pos="0 0 0" mass="4.381" diaginertia="0.019288 0.022249 0.024427"/>
+      <geom name="package_17_geom" type="box" size="0.0968 0.0857 0.0765" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_18" pos="-1.0 -100.0 5.0">
+      <freejoint name="package_18_joint"/>
+      <inertial pos="0 0 0" mass="3.173" diaginertia="0.014371 0.021067 0.022596"/>
+      <geom name="package_18_geom" type="box" size="0.1177 0.0867 0.0779" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_19" pos="-0.5 -100.0 5.0">
+      <freejoint name="package_19_joint"/>
+      <inertial pos="0 0 0" mass="7.947" diaginertia="0.049327 0.052257 0.058975"/>
+      <geom name="package_19_geom" type="box" size="0.1081 0.1029 0.0897" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_20" pos="0.0 -100.0 5.0">
+      <freejoint name="package_20_joint"/>
+      <inertial pos="0 0 0" mass="2.086" diaginertia="0.038065 0.040883 0.045326"/>
+      <geom name="package_20_geom" type="box" size="0.1861 0.1748 0.1555" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_21" pos="0.5 -100.0 5.0">
+      <freejoint name="package_21_joint"/>
+      <inertial pos="0 0 0" mass="4.888" diaginertia="0.054439 0.078463 0.080590"/>
+      <geom name="package_21_geom" type="box" size="0.1792 0.1318 0.1267" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_22" pos="1.0 -100.0 5.0">
+      <freejoint name="package_22_joint"/>
+      <inertial pos="0 0 0" mass="7.115" diaginertia="0.088716 0.106828 0.107264"/>
+      <geom name="package_22_geom" type="box" size="0.1626 0.1371 0.1364" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_23" pos="1.5 -100.0 5.0">
+      <freejoint name="package_23_joint"/>
+      <inertial pos="0 0 0" mass="6.488" diaginertia="0.098127 0.101424 0.105308"/>
+      <geom name="package_23_geom" type="box" size="0.1585 0.1536 0.1476" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_24" pos="2.0 -100.0 5.0">
+      <freejoint name="package_24_joint"/>
+      <inertial pos="0 0 0" mass="9.638" diaginertia="0.113175 0.129975 0.131917"/>
+      <geom name="package_24_geom" type="box" size="0.1521 0.1339 0.1316" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_25" pos="2.5 -100.0 5.0">
+      <freejoint name="package_25_joint"/>
+      <inertial pos="0 0 0" mass="9.707" diaginertia="0.169895 0.188682 0.222627"/>
+      <geom name="package_25_geom" type="box" size="0.1931 0.1775 0.1449" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_26" pos="3.0 -100.0 5.0">
+      <freejoint name="package_26_joint"/>
+      <inertial pos="0 0 0" mass="3.086" diaginertia="0.058788 0.060516 0.067482"/>
+      <geom name="package_26_geom" type="box" size="0.1834 0.1788 0.1587" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_27" pos="3.5 -100.0 5.0">
+      <freejoint name="package_27_joint"/>
+      <inertial pos="0 0 0" mass="2.422" diaginertia="0.034580 0.044102 0.050444"/>
+      <geom name="package_27_geom" type="box" size="0.1927 0.1592 0.1322" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_28" pos="4.0 -100.0 5.0">
+      <freejoint name="package_28_joint"/>
+      <inertial pos="0 0 0" mass="8.638" diaginertia="0.118061 0.136731 0.144715"/>
+      <geom name="package_28_geom" type="box" size="0.1684 0.1479 0.1383" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_29" pos="4.5 -100.0 5.0">
+      <freejoint name="package_29_joint"/>
+      <inertial pos="0 0 0" mass="6.459" diaginertia="0.122306 0.124582 0.140192"/>
+      <geom name="package_29_geom" type="box" size="0.1819 0.1790 0.1574" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_30" pos="5.0 -100.0 5.0">
+      <freejoint name="package_30_joint"/>
+      <inertial pos="0 0 0" mass="4.450" diaginertia="0.067857 0.070362 0.087047"/>
+      <geom name="package_30_geom" type="box" size="0.1737 0.1688 0.1313" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_31" pos="5.5 -100.0 5.0">
+      <freejoint name="package_31_joint"/>
+      <inertial pos="0 0 0" mass="1.873" diaginertia="0.024247 0.026643 0.030393"/>
+      <geom name="package_31_geom" type="box" size="0.1620 0.1497 0.1281" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_32" pos="6.0 -100.0 5.0">
+      <freejoint name="package_32_joint"/>
+      <inertial pos="0 0 0" mass="9.289" diaginertia="0.113356 0.143075 0.147297"/>
+      <geom name="package_32_geom" type="box" size="0.1691 0.1378 0.1328" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_33" pos="6.5 -100.0 5.0">
+      <freejoint name="package_33_joint"/>
+      <inertial pos="0 0 0" mass="0.717" diaginertia="0.012236 0.012296 0.013637"/>
+      <geom name="package_33_geom" type="box" size="0.1693 0.1686 0.1510" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_34" pos="7.0 -100.0 5.0">
+      <freejoint name="package_34_joint"/>
+      <inertial pos="0 0 0" mass="1.286" diaginertia="0.025600 0.027752 0.031083"/>
+      <geom name="package_34_geom" type="box" size="0.1969 0.1837 0.1612" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_35" pos="7.5 -100.0 5.0">
+      <freejoint name="package_35_joint"/>
+      <inertial pos="0 0 0" mass="5.931" diaginertia="0.103330 0.127009 0.127203"/>
+      <geom name="package_35_geom" type="box" size="0.1953 0.1618 0.1615" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_36" pos="8.0 -100.0 5.0">
+      <freejoint name="package_36_joint"/>
+      <inertial pos="0 0 0" mass="5.446" diaginertia="0.078958 0.084956 0.087549"/>
+      <geom name="package_36_geom" type="box" size="0.1605 0.1499 0.1450" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_37" pos="8.5 -100.0 5.0">
+      <freejoint name="package_37_joint"/>
+      <inertial pos="0 0 0" mass="9.014" diaginertia="0.123098 0.153204 0.179960"/>
+      <geom name="package_37_geom" type="box" size="0.1870 0.1579 0.1266" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_38" pos="9.0 -100.0 5.0">
+      <freejoint name="package_38_joint"/>
+      <inertial pos="0 0 0" mass="6.886" diaginertia="0.082848 0.104366 0.105831"/>
+      <geom name="package_38_geom" type="box" size="0.1666 0.1355 0.1331" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_39" pos="9.5 -100.0 5.0">
+      <freejoint name="package_39_joint"/>
+      <inertial pos="0 0 0" mass="7.802" diaginertia="0.134660 0.139326 0.162972"/>
+      <geom name="package_39_geom" type="box" size="0.1795 0.1745 0.1461" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_40" pos="10.0 -100.0 5.0">
+      <freejoint name="package_40_joint"/>
+      <inertial pos="0 0 0" mass="0.855" diaginertia="0.024785 0.029256 0.029984"/>
+      <geom name="package_40_geom" type="box" size="0.2458 0.2115 0.2054" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_41" pos="10.5 -100.0 5.0">
+      <freejoint name="package_41_joint"/>
+      <inertial pos="0 0 0" mass="8.178" diaginertia="0.271602 0.289187 0.300376"/>
+      <geom name="package_41_geom" type="box" size="0.2415 0.2277 0.2185" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_42" pos="11.0 -100.0 5.0">
+      <freejoint name="package_42_joint"/>
+      <inertial pos="0 0 0" mass="5.393" diaginertia="0.166509 0.192995 0.194010"/>
+      <geom name="package_42_geom" type="box" size="0.2476 0.2159 0.2145" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_43" pos="11.5 -100.0 5.0">
+      <freejoint name="package_43_joint"/>
+      <inertial pos="0 0 0" mass="0.927" diaginertia="0.027380 0.032208 0.032802"/>
+      <geom name="package_43_geom" type="box" size="0.2468 0.2128 0.2082" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_44" pos="12.0 -100.0 5.0">
+      <freejoint name="package_44_joint"/>
+      <inertial pos="0 0 0" mass="7.612" diaginertia="0.276552 0.282866 0.309877"/>
+      <geom name="package_44_geom" type="box" size="0.2496 0.2446 0.2218" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_45" pos="12.5 -100.0 5.0">
+      <freejoint name="package_45_joint"/>
+      <inertial pos="0 0 0" mass="3.501" diaginertia="0.129374 0.129450 0.139661"/>
+      <geom name="package_45_geom" type="box" size="0.2447 0.2445 0.2259" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_46" pos="13.0 -100.0 5.0">
+      <freejoint name="package_46_joint"/>
+      <inertial pos="0 0 0" mass="1.397" diaginertia="0.047583 0.048795 0.051825"/>
+      <geom name="package_46_geom" type="box" size="0.2386 0.2331 0.2187" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_47" pos="13.5 -100.0 5.0">
+      <freejoint name="package_47_joint"/>
+      <inertial pos="0 0 0" mass="2.789" diaginertia="0.094602 0.098879 0.109022"/>
+      <geom name="package_47_geom" type="box" size="0.2468 0.2373 0.2131" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_48" pos="14.0 -100.0 5.0">
+      <freejoint name="package_48_joint"/>
+      <inertial pos="0 0 0" mass="2.203" diaginertia="0.062873 0.074053 0.074517"/>
+      <geom name="package_48_geom" type="box" size="0.2416 0.2077 0.2061" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+    <body name="package_49" pos="14.5 -100.0 5.0">
+      <freejoint name="package_49_joint"/>
+      <inertial pos="0 0 0" mass="3.448" diaginertia="0.111385 0.118876 0.129061"/>
+      <geom name="package_49_geom" type="box" size="0.2437 0.2300 0.2098" material="package_material" contype="1" conaffinity="1"/>
+    </body>
+  </worldbody>
+
+  <equality>
+    <weld name="package_00_weld" body1="wrist_3_link" body2="package_00" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_01_weld" body1="wrist_3_link" body2="package_01" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_02_weld" body1="wrist_3_link" body2="package_02" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_03_weld" body1="wrist_3_link" body2="package_03" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_04_weld" body1="wrist_3_link" body2="package_04" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_05_weld" body1="wrist_3_link" body2="package_05" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_06_weld" body1="wrist_3_link" body2="package_06" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_07_weld" body1="wrist_3_link" body2="package_07" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_08_weld" body1="wrist_3_link" body2="package_08" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_09_weld" body1="wrist_3_link" body2="package_09" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_10_weld" body1="wrist_3_link" body2="package_10" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_11_weld" body1="wrist_3_link" body2="package_11" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_12_weld" body1="wrist_3_link" body2="package_12" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_13_weld" body1="wrist_3_link" body2="package_13" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_14_weld" body1="wrist_3_link" body2="package_14" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_15_weld" body1="wrist_3_link" body2="package_15" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_16_weld" body1="wrist_3_link" body2="package_16" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_17_weld" body1="wrist_3_link" body2="package_17" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_18_weld" body1="wrist_3_link" body2="package_18" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_19_weld" body1="wrist_3_link" body2="package_19" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_20_weld" body1="wrist_3_link" body2="package_20" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_21_weld" body1="wrist_3_link" body2="package_21" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_22_weld" body1="wrist_3_link" body2="package_22" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_23_weld" body1="wrist_3_link" body2="package_23" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_24_weld" body1="wrist_3_link" body2="package_24" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_25_weld" body1="wrist_3_link" body2="package_25" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_26_weld" body1="wrist_3_link" body2="package_26" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_27_weld" body1="wrist_3_link" body2="package_27" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_28_weld" body1="wrist_3_link" body2="package_28" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_29_weld" body1="wrist_3_link" body2="package_29" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_30_weld" body1="wrist_3_link" body2="package_30" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_31_weld" body1="wrist_3_link" body2="package_31" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_32_weld" body1="wrist_3_link" body2="package_32" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_33_weld" body1="wrist_3_link" body2="package_33" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_34_weld" body1="wrist_3_link" body2="package_34" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_35_weld" body1="wrist_3_link" body2="package_35" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_36_weld" body1="wrist_3_link" body2="package_36" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_37_weld" body1="wrist_3_link" body2="package_37" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_38_weld" body1="wrist_3_link" body2="package_38" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_39_weld" body1="wrist_3_link" body2="package_39" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_40_weld" body1="wrist_3_link" body2="package_40" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_41_weld" body1="wrist_3_link" body2="package_41" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_42_weld" body1="wrist_3_link" body2="package_42" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_43_weld" body1="wrist_3_link" body2="package_43" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_44_weld" body1="wrist_3_link" body2="package_44" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_45_weld" body1="wrist_3_link" body2="package_45" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_46_weld" body1="wrist_3_link" body2="package_46" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_47_weld" body1="wrist_3_link" body2="package_47" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_48_weld" body1="wrist_3_link" body2="package_48" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+    <weld name="package_49_weld" body1="wrist_3_link" body2="package_49" active="false" relpose="0 0.23 0 0.7071 0.7071 0 0"/>
+  </equality>
+
+  <actuator>
+    <!-- Actuator gains tuned to UR10e torque limits. -->
+    <!-- kp=1500 Nm/rad, kv=150 Nm.s/rad on shoulders -->
+    <!-- Elbow kp=800, wrists kp=200 -->
+    <!-- forcerange matches UR10e joint specifications -->
+    <position joint="shoulder_pan_joint" name="shoulder_pan_motor" kp="5000" kv="500" ctrlrange="-6.2831 6.2831"/>
+    <position joint="shoulder_lift_joint" name="shoulder_lift_motor" kp="5000" kv="500" ctrlrange="-6.2831 6.2831"/>
+    <position joint="elbow_joint" name="elbow_motor" kp="5000" kv="500" ctrlrange="-6.2831 6.2831"/>
+    <position joint="wrist_1_joint" name="wrist_1_motor" kp="5000" kv="500" ctrlrange="-6.2831 6.2831"/>
+    <position joint="wrist_2_joint" name="wrist_2_motor" kp="5000" kv="500" ctrlrange="-6.2831 6.2831"/>
+    <position joint="wrist_3_joint" name="wrist_3_motor" kp="5000" kv="500" ctrlrange="-6.2831 6.2831"/>
+  </actuator>
+</mujoco>

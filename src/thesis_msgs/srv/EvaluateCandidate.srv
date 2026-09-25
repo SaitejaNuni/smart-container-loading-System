@@ -1,0 +1,12 @@
+# Request: a candidate placement position and box size
+# Coordinates are CONTAINER-LOCAL (not world frame)
+float32 x
+float32 y
+float32 z
+float32 length
+float32 width
+float32 height
+---
+# Response: collision check + support computation
+bool collides
+float32 support_fraction
