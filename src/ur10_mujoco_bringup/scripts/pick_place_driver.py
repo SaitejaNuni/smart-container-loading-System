@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Multi-package pick-and-place test with metrics logging.
+Multi-package pick-and-place driver with metrics logging.
 
 Runs the full sequence N times, where N is set by the `num_packages`
 parameter (default 1). Writes a CSV row per cycle to:
     ~/thesis_mujoco_ws/placement_metrics.csv
 
 Run:
-    ros2 run ur10_mujoco_bringup test_rotation_only.py
-    ros2 run ur10_mujoco_bringup test_rotation_only.py --ros-args -p num_packages:=3
+    ros2 run ur10_mujoco_bringup pick_place_driver.py
+    ros2 run ur10_mujoco_bringup pick_place_driver.py --ros-args -p num_packages:=3
 """
 
 import json
@@ -35,7 +35,7 @@ from ssik.prebuilt import ur10e_ik
 # TUNABLE PARAMETERS
 # =============================================================================
 
-PICKUP_HEIGHT_FACTOR = 0.5
+PICKUP_HEIGHT_FACTOR = 0.6
 WELD_QUAT_WXYZ = (0.7071, 0.7071, 0.0, 0.0)
 RELPOSE_SETTLE = 0.15
 
@@ -87,9 +87,9 @@ def wraparound_distance(q, seed):
     return float(np.linalg.norm(wrap_angle(np.asarray(q) - np.asarray(seed))))
 
 
-class RotationTester(Node):
+class PickPlaceDriver(Node):
     def __init__(self):
-        super().__init__("test_rotation_only")
+        super().__init__("pick_place_driver")
         self.cb = ReentrantCallbackGroup()
 
         self.declare_parameter("num_packages", 1)
@@ -318,6 +318,15 @@ class RotationTester(Node):
             f"# CYCLE {cycle_num}/{self.num_packages}")
         self.get_logger().info("#" * 60)
 
+        # 0. Recover to HOME in case the previous cycle left the arm off-target.
+        #    Idempotent: if the arm is already at HOME, MoveIt plans a trivial
+        #    trajectory. If the previous cycle aborted mid-move, this pulls the
+        #    arm back to a known state before starting a new cycle.
+        if not self.move_joints(HOME_Q, "0-recover-home"):
+            self.get_logger().warn(
+                "0-recover-home failed; the arm may be in an unusual state")
+        time.sleep(0.5)
+
         # 1. Get + spawn
         pkg = self.get_next_package()
         if pkg is None:
@@ -330,7 +339,7 @@ class RotationTester(Node):
 
         # 2. Rotate to HOME2
         self.move_joints(HOME2_Q, "2-home2")
-        time.sleep(1.5)
+        time.sleep(2.5)
 
         # 3. Reach pickup
         target_z = PICKUP_TOP_TF_Z + pkg.height
@@ -354,11 +363,13 @@ class RotationTester(Node):
 
         # 6. Return HOME2
         self.move_joints(HOME2_Q, "6-return-home2")
-        time.sleep(1.5)
+        time.sleep(2.5)
 
         # 7. Rotate HOME
-        self.move_joints(HOME_Q, "7-home")
-        time.sleep(1.5)
+        if not self.move_joints(HOME_Q, "7-home"):
+            self.get_logger().error("7-home failed; aborting cycle")
+            return False
+        time.sleep(2.5)
 
         # 8. Placement (timed)
         t_plan_start = time.time()
@@ -387,30 +398,52 @@ class RotationTester(Node):
             f"{tool_target_tf[2]:+.3f})")
 
         t_ik_start = time.time()
-        solved = self.analytical_ik(
+        solved_place = self.analytical_ik(
             tool_target_tf, TOOL_DOWN_QUAT_XYZW, HOME_Q)
         t_ik_end = time.time()
         ik_time = t_ik_end - t_ik_start
 
-        if solved is None:
+        if solved_place is None:
             return False
-        self.move_joints(solved, "8-reach-place")
+        self.move_joints(solved_place, "8-reach-place")
         time.sleep(1.0)
 
         # 9. Weld OFF (timed)
         t_weld_off = time.time()
         self.set_weld(False)
-        time.sleep(1.5)   # let the package settle in the container
+        time.sleep(1.0)   # initial release
 
-        # 9b. Tell container_state the placement is complete
+        # 9a. Retract straight up ~5 cm so the falling package cannot disturb
+        #     the arm as it settles in the container.
+        retract_target = tool_target_tf.copy()
+        retract_target[2] += 0.05
+        solved_retract = self.analytical_ik(
+            retract_target, TOOL_DOWN_QUAT_XYZW, solved_place)
+        if solved_retract is not None:
+            self.move_joints(solved_retract, "9-retract")
+            time.sleep(0.8)
+        else:
+            self.get_logger().warn(
+                "9-retract: no IK solution; skipping retract")
+
+        # 9b. Notify container_state so the next cycle sees an updated grid
         self.publish_placement(target, pkg)
         t_placed = time.time()
         settle_time = t_placed - t_weld_off
-        time.sleep(0.5)
+
+        # 9c. Let the package finish bouncing inside the container before we
+        #     ask the arm to move home.
+        time.sleep(2.0)
 
         # 10. Return HOME
-        self.move_joints(HOME_Q, "10-home")
-        time.sleep(1.0)
+        #     The package is already placed and container_state has been
+        #     notified, so a failure here does not lose any data. Log a
+        #     warning and let the next cycle's 0-recover-home pull the arm
+        #     back if needed.
+        if not self.move_joints(HOME_Q, "10-home"):
+            self.get_logger().warn(
+                "10-home failed; next cycle will recover")
+        time.sleep(1.5)
 
         # ---- Metrics ----
         carry_time = t_weld_off - self._t_weld_on
@@ -452,7 +485,7 @@ class RotationTester(Node):
 
 def main():
     rclpy.init()
-    node = RotationTester()
+    node = PickPlaceDriver()
 
     executor = MultiThreadedExecutor()
     executor.add_node(node)

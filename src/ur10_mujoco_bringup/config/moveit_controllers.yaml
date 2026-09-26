@@ -14,5 +14,5 @@ moveit_simple_controller_manager:
       - wrist_2_joint
       - wrist_3_joint
     # Increased from default 0.01 to accommodate the sag from the welded package.
-    allowed_start_tolerance: 0.1
+    allowed_start_tolerance: 0.2
     allowed_goal_tolerance: 0.1

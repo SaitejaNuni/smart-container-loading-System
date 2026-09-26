@@ -50,7 +50,7 @@ placement_planner_node → decides where in the container
 container_state_node → tracks voxels, placed boxes, extreme points
 │
 ▼ PlacementTarget
-test_rotation_only.py → drives spawn, pick, place; uses ssik + MoveIt2
+pick_place_driver.py → drives spawn, pick, place; uses ssik + MoveIt2
 │
 ▼ joint trajectories + weld commands
 mujoco_ros2_control + weld_plugin → physics loop, weld toggling
@@ -83,7 +83,7 @@ The cycle per package:
 
 Key files:
 
-- `src/ur10_mujoco_bringup/scripts/test_rotation_only.py` — main test driver
+- `src/ur10_mujoco_bringup/scripts/pick_place_driver.py` — main test driver
 - `src/mujoco_ros2_control/mujoco_ros2_control_plugins/src/weld_plugin.cpp` — custom plugin
 - `src/thesis_packing/thesis_packing/placement_planner_node.py` — packing algorithm
 - `src/thesis_packing/thesis_packing/container_state_node.py` — container model
@@ -154,4 +154,4 @@ Serves /plan_placement. Given a package, returns where to put it.
 
 Terminal 6 — Pick-and-place driver
 bash
-ros2 run ur10_mujoco_bringup test_rotation_only.py --ros-args -p num_packages:=3
+ros2 run ur10_mujoco_bringup pick_place_driver.py --ros-args -p num_packages:=3

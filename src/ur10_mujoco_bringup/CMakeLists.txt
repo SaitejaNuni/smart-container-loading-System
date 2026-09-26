@@ -38,7 +38,7 @@ install(PROGRAMS
   scripts/check_tool_orientation.py
   scripts/publish_container_to_moveit.py
   scripts/test_pickup_direct.py
-  scripts/test_rotation_only.py
+  scripts/pick_place_driver.py
   scripts/diagnose_ssik_frame.py
   scripts/diagnose_weld.py
   scripts/diagnose_frames.py
