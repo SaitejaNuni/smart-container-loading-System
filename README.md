@@ -155,3 +155,20 @@ Serves /plan_placement. Given a package, returns where to put it.
 Terminal 6 — Pick-and-place driver
 bash
 ros2 run ur10_mujoco_bringup pick_place_driver.py --ros-args -p num_packages:=3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
